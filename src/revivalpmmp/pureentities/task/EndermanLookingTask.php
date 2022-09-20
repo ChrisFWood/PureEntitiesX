@@ -21,7 +21,6 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\task;
 
-
 use pocketmine\entity\Living;
 use pocketmine\scheduler\Task;
 use revivalpmmp\pureentities\entity\monster\walking\Enderman;

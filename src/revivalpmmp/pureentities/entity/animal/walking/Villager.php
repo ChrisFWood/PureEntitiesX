@@ -21,14 +21,15 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
+use pocketmine\nbt\tag\CompoundTag;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
 
 class Villager extends WalkingAnimal{
 	const NETWORK_ID = Data::NETWORK_IDS["villager"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 1.1;
 	}
 

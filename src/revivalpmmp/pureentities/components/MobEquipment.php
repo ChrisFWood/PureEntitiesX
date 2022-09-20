@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\components;
 
-
 use LogLevel;
 use pocketmine\entity\object\ItemEntity;
 use pocketmine\item\Armor;

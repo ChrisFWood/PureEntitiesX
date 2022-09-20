@@ -21,17 +21,13 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\animal\flying;
 
-use pocketmine\entity\Creature;
+use pocketmine\entity\Living;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\animal\FlyingAnimal;
 
 class Bat extends FlyingAnimal{
 	//TODO implement
 	const NETWORK_ID = Data::NETWORK_IDS["bat"];
-
-	public function initEntity() : void{
-		parent::initEntity();
-	}
 
 	public function getSpeed() : float{
 		return $this->speed;
@@ -41,7 +37,7 @@ class Bat extends FlyingAnimal{
 		return "Bat";
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		return false;
 	}
 

@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\components;
 
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\NBTConst;
@@ -109,7 +109,7 @@ class IdlingComponent{
 		if(!$this->idling and // of course it should not idle currently
 			($this->baseEntity instanceof IntfCanBreed and $this->baseEntity->getBreedingComponent()->getInLove() <= 0) and // do not rest while in love!
 			!$this->baseEntity->getBaseTarget() instanceof Player and // chasing a player? no idle
-			!$this->baseEntity->getBaseTarget() instanceof Creature and // chasing a creature? no idle!
+			!$this->baseEntity->getBaseTarget() instanceof Living and // chasing a creature? no idle!
 			$this->isLastIdleLongEnough() // we do not want idling too often
 		){
 			if(mt_rand(0, 100) <= $this->idleChance or $force){ // with a chance of x percent the entity starts to idle

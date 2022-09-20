@@ -28,6 +28,7 @@ use pocketmine\event\entity\EntityShootBowEvent;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\level\Level;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\components\MobEquipment;
 use revivalpmmp\pureentities\data\Data;
@@ -47,8 +48,8 @@ class Skeleton extends WalkingMonster implements IntfCanEquip, ProjectileSource{
 
 	protected $pickUpLoot = [];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->attackDistance = 16;
 		$this->mobEquipment = new MobEquipment($this);
 		$this->mobEquipment->init();

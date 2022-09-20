@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\animal;
 
-use pocketmine\entity\Creature;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
@@ -161,11 +161,11 @@ abstract class WalkingAnimal extends WalkingEntity implements Animal{
 	}
 
 	/**
-	 * @param Creature $creature
+	 * @param Living $creature
 	 * @param float    $distance
 	 * @return bool
 	 */
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		$targetOption = false;
 		if($creature instanceof Player){ // a player requests the target option
 			if($creature !== null and $creature->getInventory() !== null){ // sometimes, we get null on getInventory?!

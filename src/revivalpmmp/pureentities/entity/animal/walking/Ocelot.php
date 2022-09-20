@@ -21,8 +21,9 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
-use pocketmine\entity\Creature;
+use pocketmine\entity\Living;
 use pocketmine\item\Item;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\components\BreedingComponent;
 use revivalpmmp\pureentities\data\Data;
@@ -38,7 +39,6 @@ use revivalpmmp\pureentities\traits\Breedable;
 use revivalpmmp\pureentities\traits\CanPanic;
 use revivalpmmp\pureentities\traits\Feedable;
 use revivalpmmp\pureentities\traits\Tameable;
-
 
 // TODO: Add 'Begging Mode' for untamed ocelots.
 // TODO: Fix tamed ocelot response to Owner in combat (should avoid fights).
@@ -77,8 +77,8 @@ class Ocelot extends WalkingAnimal implements IntfTameable, IntfCanBreed, IntfCa
 		return 0.8;
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 1.2;
 		$this->setNormalSpeed($this->speed);
 		$this->setPanicSpeed(1.4);
@@ -205,7 +205,7 @@ class Ocelot extends WalkingAnimal implements IntfTameable, IntfCanBreed, IntfCa
 
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 
 		if($creature instanceof Player){
 			return $creature->spawned && $creature->isAlive() && !$creature->isClosed() && $creature->getInventory()->getItemInHand()->getId() === Item::RAW_FISH && $distance <= 49;

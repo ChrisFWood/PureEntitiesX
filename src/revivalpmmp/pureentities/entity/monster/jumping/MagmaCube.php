@@ -49,8 +49,8 @@ class MagmaCube extends JumpingMonster{
 		$this->setScale($this->cubeSize);
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 0.8;
 
 		$this->fireProof = true;

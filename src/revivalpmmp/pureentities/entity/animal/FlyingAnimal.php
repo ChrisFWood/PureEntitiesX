@@ -25,6 +25,7 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\ButtonText;
 use revivalpmmp\pureentities\entity\FlyingEntity;
@@ -40,8 +41,8 @@ abstract class FlyingAnimal extends FlyingEntity implements Animal{
 		return 0.7;
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt) : void{
+		parent::initEntity($nbt);
 
 		if($this->getDataPropertyManager()->getPropertyValue(self::DATA_FLAG_BABY, 0) === null){
 			$this->setDataFlag(self::DATA_FLAG_BABY, self::DATA_TYPE_BYTE, false);

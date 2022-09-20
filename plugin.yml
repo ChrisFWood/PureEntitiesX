@@ -1,7 +1,7 @@
 name: PureEntitiesX
 main: revivalpmmp\pureentities\PureEntities
-version: 0.7.0
-api: 3.19.0
+version: 0.8.0
+api: 4.8.1
 
 load: STARTUP
 authors: ["milk0417", "RevivalPMMP"]
@@ -12,14 +12,12 @@ permissions:
  pureentities:
   default: op
   description: "Allows using all the PureEntities commands"
-  children:
-    pureentities.command:
-    default: op
-    description: "Allows using all the PureEntities commands"
-    children:
-      pureentities.command.pesummon:
-        default: op
-        description: "Allows spawning mobs"
-      pureentities.command.peremove:
-        default: op
-        description: "Allows removal of all non-player entities from loaded chunks"
+ pureentities.command:
+  default: op
+  description: "Allows using all the PureEntities commands"
+ pureentities.command.pesummon:
+  default: op
+  description: "Allows spawning mobs"
+ pureentities.command.peremove:
+  default: op
+  description: "Allows removal of all non-player entities from loaded chunks"

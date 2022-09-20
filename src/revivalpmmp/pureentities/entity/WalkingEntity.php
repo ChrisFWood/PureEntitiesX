@@ -23,7 +23,6 @@ namespace revivalpmmp\pureentities\entity;
 
 use pocketmine\block\Block;
 use pocketmine\block\Liquid;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Living;
 use pocketmine\entity\object\ItemEntity;
 use pocketmine\math\Math;
@@ -38,7 +37,6 @@ use revivalpmmp\pureentities\features\IntfTameable;
 use revivalpmmp\pureentities\PureEntities;
 use revivalpmmp\pureentities\utils\PeTimings;
 
-
 abstract class WalkingEntity extends BaseEntity{
 
 	protected function checkTarget(bool $checkSkip = true){
@@ -50,10 +48,10 @@ abstract class WalkingEntity extends BaseEntity{
 			}
 
 			$target = $this->getBaseTarget();
-			if(!$target instanceof Creature or !$this->targetOption($target, $this->distanceSquared($target))){
+			if(!$target instanceof Living or !$this->targetOption($target, $this->distanceSquared($target))){
 				$near = PHP_INT_MAX;
 				foreach($this->getLevel()->getEntities() as $creature){
-					if($creature === $this || !($creature instanceof Creature) || $creature instanceof Animal){
+					if($creature === $this || !($creature instanceof Living) || $creature instanceof Animal){
 						continue;
 					}
 
@@ -81,7 +79,7 @@ abstract class WalkingEntity extends BaseEntity{
 				}
 			}
 
-			if($this->getBaseTarget() instanceof Creature && $this->getBaseTarget()->isAlive()){
+			if($this->getBaseTarget() instanceof Living && $this->getBaseTarget()->isAlive()){
 				PeTimings::stopTiming("WalkingAnimal: checkTarget()", true);
 				return;
 			}
@@ -148,7 +146,7 @@ abstract class WalkingEntity extends BaseEntity{
 
 		$before = $this->getBaseTarget();
 		$this->checkTarget();
-		if($this->getBaseTarget() instanceof Creature or $this->getBaseTarget() instanceof Block or $before !== $this->getBaseTarget() and
+		if($this->getBaseTarget() instanceof Living or $this->getBaseTarget() instanceof Block or $before !== $this->getBaseTarget() and
 			$this->getBaseTarget() !== null
 		){
 			$x = $this->getBaseTarget()->x - $this->x;
@@ -199,7 +197,7 @@ abstract class WalkingEntity extends BaseEntity{
 			$this->stayTime -= $tickDiff;
 			$this->move(0, $this->motion->y * $tickDiff, 0);
 		}//I cannot jump, so am i collided and cannot jump ? (Without target creature, and on ground)
-		elseif($this->isCollidedHorizontally && !$isJump && !$this->getBaseTarget() instanceof Creature && $before === $this->getBaseTarget() && $this->isOnGround()){
+		elseif($this->isCollidedHorizontally && !$isJump && !$this->getBaseTarget() instanceof Living && $before === $this->getBaseTarget() && $this->isOnGround()){
 			$this->move(0, $this->motion->y * $tickDiff, 0);
 			// $this->yaw = $this->getYaw() + mt_rand(-120, 120);
 			$this->motion->x = 0;

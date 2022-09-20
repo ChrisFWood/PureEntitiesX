@@ -22,11 +22,12 @@ declare(strict_types=1);
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
 use pocketmine\block\Pumpkin;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
@@ -37,8 +38,8 @@ class Enderman extends WalkingMonster{
 
 	const NETWORK_ID = Data::NETWORK_IDS["enderman"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 1.21;
 
 		$this->setDamage([0, 4, 7, 10]);
@@ -70,7 +71,7 @@ class Enderman extends WalkingMonster{
 		return [];
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		// enderman don't attack alone. they only attack when looked at
 		return false;
 	}

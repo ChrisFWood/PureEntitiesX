@@ -21,9 +21,10 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\animal\walking;
 
-use pocketmine\entity\Creature;
+use pocketmine\entity\Living;
 use pocketmine\entity\Rideable;
 use pocketmine\item\Item;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\animal\WalkingAnimal;
@@ -35,15 +36,15 @@ class Llama extends WalkingAnimal implements Rideable{
 
 	const NETWORK_ID = Data::NETWORK_IDS["llama"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 	}
 
 	public function getName() : string{
 		return "Llama";
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		if($creature instanceof Player){
 			return $creature->spawned && $creature->isAlive() && !$creature->isClosed() && $creature->getInventory()->getItemInHand()->getId() === Item::APPLE && $distance <= 49;
 		}

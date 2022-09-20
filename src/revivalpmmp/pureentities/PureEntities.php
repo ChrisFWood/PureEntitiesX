@@ -25,13 +25,18 @@ use LogLevel;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIds;
 use pocketmine\entity\Entity;
-use pocketmine\item\Item;
+use pocketmine\entity\EntityFactory;
+use pocketmine\inventory\CreativeInventory;
+use pocketmine\item\ItemFactory;
+use pocketmine\item\ItemIds as Ids;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\tile\Tile;
+use pocketmine\world\World;
 use revivalpmmp\pureentities\block\MonsterSpawnerPEX;
 use revivalpmmp\pureentities\commands\RemoveEntitiesCommand;
 use revivalpmmp\pureentities\commands\SummonCommand;
@@ -114,7 +119,7 @@ class PureEntities extends PluginBase{
 	}
 
 
-	public function onLoad(){
+	public function onLoad() : void{
 		$temp = [
 			Bat::class,
 			Blaze::class,
@@ -173,12 +178,17 @@ class PureEntities extends PluginBase{
 			ZombieVillager::class
 		];
 
+        $entityFactory = EntityFactory::getInstance();
+		$itemFactory = ItemFactory::getInstance();
+		$creativeInventory = CreativeInventory::getInstance();
 		foreach($temp as $class){
 			self::$registeredClasses[strtolower($this->getShortClassName($class))] = $class;
 		}
 
 		foreach(self::$registeredClasses as $name){
-			Entity::registerEntity($name);
+        		$entityFactory->register($name, function(World $world, CompoundTag $nbt) : Entity{
+	        	        return self::create($name, Helper::parseLocation($nbt, $world));
+		        }, [$this->getShortClassName($class)]);
 			if(
 				$name === IronGolem::class
 				|| $name === LargeFireball::class
@@ -188,9 +198,10 @@ class PureEntities extends PluginBase{
 			){
 				continue;
 			}
-			$item = Item::get(Item::SPAWN_EGG, $name::NETWORK_ID);
-			if(!Item::isCreativeItem($item)){
-				Item::addCreativeItem($item);
+
+			$item = $itemFactory->get(Ids::SPAWN_EGG, $name::NETWORK_ID);
+			if(!$creativeInventory->contains($item)){
+				$creativeInventory->add($item);
 			}
 		}
 
@@ -206,7 +217,7 @@ class PureEntities extends PluginBase{
 		$this->getServer()->getLogger()->info("[PureEntitiesX] Originally written by milk0417. Currently maintained by RevivalPMMP for PMMP 'REDACTED'.");
 	}
 
-	public function onEnable(){
+	public function onEnable() : void{
 		new PluginConfiguration($this); // create plugin configuration
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 		if(PluginConfiguration::getInstance()->getEnableSpawning()){

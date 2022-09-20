@@ -24,11 +24,12 @@ namespace revivalpmmp\pureentities\entity\monster\flying;
 use pocketmine\block\Liquid;
 use pocketmine\block\Stair;
 use pocketmine\block\StoneSlab;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\math\Math;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\animal\Animal;
@@ -42,8 +43,8 @@ class Vex extends FlyingMonster implements Monster{
 	// TODO create methods specific to Vexes
 	const NETWORK_ID = Data::NETWORK_IDS["vex"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->gravity = 0.04;
 
 		$this->setDamage([0, 0, 0, 0]);
@@ -60,10 +61,10 @@ class Vex extends FlyingMonster implements Monster{
 			}
 
 			$target = $this->getBaseTarget();
-			if(!($target instanceof Creature) or !$this->targetOption($target, $this->distanceSquared($target))){
+			if(!($target instanceof Living) or !$this->targetOption($target, $this->distanceSquared($target))){
 				$near = PHP_INT_MAX;
 				foreach($this->getLevel()->getEntities() as $creature){
-					if($creature === $this || !($creature instanceof Creature) || $creature instanceof Animal){
+					if($creature === $this || !($creature instanceof Living) || $creature instanceof Animal){
 						continue;
 					}
 
@@ -80,7 +81,7 @@ class Vex extends FlyingMonster implements Monster{
 				}
 			}
 
-			if($this->getBaseTarget() instanceof Creature && $this->getBaseTarget()->isAlive()){
+			if($this->getBaseTarget() instanceof Living && $this->getBaseTarget()->isAlive()){
 				return;
 			}
 
@@ -146,7 +147,7 @@ class Vex extends FlyingMonster implements Monster{
 				$this->motion->x = 0;
 				$this->motion->z = 0;
 			}else{
-				if($this->getBaseTarget() instanceof Creature){
+				if($this->getBaseTarget() instanceof Living){
 					$this->motion->x = 0;
 					$this->motion->z = 0;
 					if($this->distance($this->getBaseTarget()) > $this->y - $this->getLevel()->getHighestBlockAt((int) $this->x, (int) $this->z)){

@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity;
 
-use pocketmine\entity\Creature;
+use pocketmine\entity\Living;
 use pocketmine\math\Math;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
@@ -38,10 +38,10 @@ abstract class FlyingEntity extends BaseEntity{
 			}
 
 			$target = $this->getBaseTarget();
-			if(!($target instanceof Creature) or !$this->targetOption($target, $this->distanceSquared($target))){
+			if(!($target instanceof Living) or !$this->targetOption($target, $this->distanceSquared($target))){
 				$near = PHP_INT_MAX;
 				foreach($this->getLevel()->getEntities() as $creature){
-					if($creature === $this || !($creature instanceof Creature) || $creature instanceof Animal){
+					if($creature === $this || !($creature instanceof Living) || $creature instanceof Animal){
 						continue;
 					}
 
@@ -58,7 +58,7 @@ abstract class FlyingEntity extends BaseEntity{
 				}
 			}
 
-			if($this->getBaseTarget() instanceof Creature && $this->getBaseTarget()->isAlive()){
+			if($this->getBaseTarget() instanceof Living && $this->getBaseTarget()->isAlive()){
 				return;
 			}
 

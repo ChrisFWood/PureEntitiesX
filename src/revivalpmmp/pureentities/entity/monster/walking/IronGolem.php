@@ -21,12 +21,13 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\monster\walking;
 
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\monster\WalkingMonster;
@@ -35,8 +36,8 @@ use revivalpmmp\pureentities\utils\MobDamageCalculator;
 class IronGolem extends WalkingMonster{
 	const NETWORK_ID = Data::NETWORK_IDS["iron_golem"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 0.8;
 		$this->setMaxHealth(20);
 		$this->setHealth(20);
@@ -68,7 +69,7 @@ class IronGolem extends WalkingMonster{
 		}
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		if(!($creature instanceof Player)){
 			return $creature->isAlive() && $distance <= 60;
 		}

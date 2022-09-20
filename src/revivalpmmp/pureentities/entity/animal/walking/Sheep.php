@@ -73,8 +73,8 @@ class Sheep extends WalkingAnimal implements IntfCanBreed, IntfCanInteract, Intf
 		return intval($arr[mt_rand(0, count($arr) - 1)]);
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->breedableClass = new BreedingComponent($this);
 		$this->breedableClass->init();
 		$this->feedableItems = array(Item::WHEAT);

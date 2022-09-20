@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\projectile;
 
-
 use pocketmine\entity\Entity;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;

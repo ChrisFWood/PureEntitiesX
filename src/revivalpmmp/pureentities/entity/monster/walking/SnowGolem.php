@@ -47,8 +47,8 @@ class SnowGolem extends WalkingMonster implements ProjectileSource, IntfCanInter
 	use Shearable;
 	const NETWORK_ID = Data::NETWORK_IDS["snow_golem"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 
 		$this->setFriendly(true);
 		$this->setSheared($this->isSheared()); // set data from NBT

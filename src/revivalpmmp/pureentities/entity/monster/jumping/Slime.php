@@ -21,7 +21,6 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\monster\jumping;
 
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -52,8 +51,8 @@ class Slime extends JumpingMonster{
 		$this->setScale($this->cubeSize);
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 0.8;
 
 		$this->setDamage([0, 2, 2, 3]);
@@ -101,7 +100,7 @@ class Slime extends JumpingMonster{
 		}
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		if($creature instanceof Player){
 			return $creature->isAlive() && $distance <= 25;
 		}

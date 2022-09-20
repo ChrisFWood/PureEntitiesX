@@ -23,8 +23,9 @@ namespace revivalpmmp\pureentities\entity;
 
 use pocketmine\block\Block;
 use pocketmine\block\Water;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\EntitySizeInfo;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -46,7 +47,7 @@ use revivalpmmp\pureentities\PureEntities;
 
 //use pocketmine\event\Timings;
 
-abstract class BaseEntity extends Creature{
+abstract class BaseEntity extends Living{
 
 	public $stayTime = 0;
 	protected $moveTime = 0;
@@ -71,8 +72,7 @@ abstract class BaseEntity extends Creature{
 	 */
 	protected $maxJumpHeight = 1.2;
 	protected $checkTargetSkipTicks = 1; // default: no skip
-	public $width = 1.0;
-	public $height = 1.0;
+
 	public $speed = 1.0;
 
 
@@ -96,8 +96,6 @@ abstract class BaseEntity extends Creature{
 	}
 
 	public function __construct(Level $level, CompoundTag $nbt){
-		$this->width = Data::WIDTHS[static::NETWORK_ID];
-		$this->height = Data::HEIGHTS[static::NETWORK_ID];
 		$this->idlingComponent = new IdlingComponent($this);
 		$this->checkTargetSkipTicks = PluginConfiguration::getInstance()->getCheckTargetSkipTicks();
 		$this->maxAge = PluginConfiguration::getInstance()->getMaxAge();
@@ -115,6 +113,17 @@ abstract class BaseEntity extends Creature{
 
 	public function updateXpDropAmount() : void{
 		$this->xpDropAmount = 0;
+	}
+
+	protected function getInitialSizeInfo() : EntitySizeInfo {
+		return new EntitySizeInfo(
+			Data::WIDTHS[static::NETWORK_ID],
+			Data::HEIGHTS[static::NETWORK_ID]
+		);
+	}
+
+	public static function getNetworkTypeId() : string{
+		return static::NETWORK_ID;
 	}
 
 	/**
@@ -198,8 +207,8 @@ abstract class BaseEntity extends Creature{
 		return $this->maxJumpHeight;
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt) : void{
+		parent::initEntity($nbt);
 
 		$this->loadNBT();
 
@@ -208,16 +217,18 @@ abstract class BaseEntity extends Creature{
 		$this->idlingComponent->loadFromNBT();
 	}
 
-	public function saveNBT() : void{
+	public function saveNBT() : CompoundTag{
 		if(PluginConfiguration::getInstance()->getEnableNBT()){
-			parent::saveNBT();
+			$nbt = parent::saveNBT();
 			$this->namedtag->setByte(NBTConst::NBT_KEY_MOVEMENT, (int) $this->isMovement(), true);
 			$this->namedtag->setByte(NBTConst::NBT_KEY_WALL_CHECK, (int) $this->isWallCheck(), true);
 			$this->namedtag->setInt(NBTConst::NBT_KEY_AGE_IN_TICKS, $this->ticksLived, true);
 
 			// No reason to attempt this if getEnableNBT is false.
 			$this->idlingComponent->saveNBT();
+			return $nbt;
 		}
+		return null;
 	}
 
 	public function loadNBT(){
@@ -302,10 +313,6 @@ abstract class BaseEntity extends Creature{
 		$this->checkAttackByTamedEntities($source);
 	}
 
-	public function knockBack(Entity $attacker, float $damage, float $x, float $z, float $base = 0.4) : void{
-		parent::knockBack($attacker, $damage, $x, $z, $base);
-	}
-
 	public function entityBaseTick(int $tickDiff = 1) : bool{
 		//Timings::$timerEntityBaseTick->startTiming();
 		if($this->isClosed() or $this->level === null){
@@ -388,7 +395,7 @@ abstract class BaseEntity extends Creature{
 		return;
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		return $this instanceof Monster && (!($creature instanceof Player) || ($creature->isSurvival() && $creature->spawned)) && $creature->isAlive() && !$creature->isClosed() && $distance <= 81;
 	}
 
@@ -514,10 +521,10 @@ abstract class BaseEntity extends Creature{
 	/**
 	 * Checks if this entity is following a player
 	 *
-	 * @param Creature $creature the possible player
+	 * @param Living $creature the possible player
 	 * @return bool
 	 */
-	protected function isFollowingPlayer(Creature $creature) : bool{
+	protected function isFollowingPlayer(Living $creature) : bool{
 		return $this->getBaseTarget() !== null and $this->getBaseTarget() instanceof Player and $this->getBaseTarget()->getId() === $creature->getId();
 	}
 }

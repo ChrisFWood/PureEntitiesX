@@ -24,8 +24,8 @@ namespace revivalpmmp\pureentities\entity\monster\flying;
 use pocketmine\block\Liquid;
 use pocketmine\block\Stair;
 use pocketmine\block\StoneSlab;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\entity\projectile\ProjectileSource;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\item\Item;
@@ -34,6 +34,7 @@ use pocketmine\level\sound\LaunchSound;
 use pocketmine\math\Math;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use revivalpmmp\pureentities\data\Data;
 use revivalpmmp\pureentities\entity\animal\Animal;
@@ -44,8 +45,8 @@ use revivalpmmp\pureentities\entity\projectile\SmallFireball;
 class Blaze extends FlyingMonster implements ProjectileSource{
 	const NETWORK_ID = Data::NETWORK_IDS["blaze"];
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->gravity = 0.04;
 
 		$this->fireProof = true;
@@ -63,10 +64,10 @@ class Blaze extends FlyingMonster implements ProjectileSource{
 			}
 
 			$target = $this->getBaseTarget();
-			if(!($target instanceof Creature) or !$this->targetOption($target, $this->distanceSquared($target))){
+			if(!($target instanceof Living) or !$this->targetOption($target, $this->distanceSquared($target))){
 				$near = PHP_INT_MAX;
 				foreach($this->getLevel()->getEntities() as $creature){
-					if($creature === $this || !($creature instanceof Creature) || $creature instanceof Animal){
+					if($creature === $this || !($creature instanceof Living) || $creature instanceof Animal){
 						continue;
 					}
 
@@ -83,7 +84,7 @@ class Blaze extends FlyingMonster implements ProjectileSource{
 				}
 			}
 
-			if($this->getBaseTarget() instanceof Creature && $this->getBaseTarget()->isAlive()){
+			if($this->getBaseTarget() instanceof Living && $this->getBaseTarget()->isAlive()){
 				return;
 			}
 
@@ -149,7 +150,7 @@ class Blaze extends FlyingMonster implements ProjectileSource{
 				$this->motion->x = 0;
 				$this->motion->z = 0;
 			}else{
-				if($this->getBaseTarget() instanceof Creature){
+				if($this->getBaseTarget() instanceof Living){
 					$this->motion->x = 0;
 					$this->motion->z = 0;
 					if($this->distance($this->getBaseTarget()) > $this->y - $this->getLevel()->getHighestBlockAt((int) $this->x, (int) $this->z)){

@@ -21,8 +21,8 @@ declare(strict_types=1);
 
 namespace revivalpmmp\pureentities\entity\monster\flying;
 
-use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\entity\projectile\ProjectileSource;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\item\Item;
@@ -44,8 +44,8 @@ class Ghast extends FlyingMonster implements ProjectileSource{
 		parent::__construct($level, $nbt);
 	}
 
-	public function initEntity() : void{
-		parent::initEntity();
+	public function initEntity(CompoundTag $nbt): void{
+		parent::initEntity($nbt);
 		$this->speed = 1.2;
 		$this->fireProof = true;
 		$this->setDamage([0, 0, 0, 0]);
@@ -55,7 +55,7 @@ class Ghast extends FlyingMonster implements ProjectileSource{
 		return "Ghast";
 	}
 
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		return (!($creature instanceof Player) || ($creature->isSurvival() && $creature->spawned)) && $creature->isAlive() && !$creature->isClosed() && $distance <= 10000;
 	}
 

@@ -22,9 +22,9 @@ declare(strict_types=1);
 namespace revivalpmmp\pureentities\entity\monster;
 
 use pocketmine\block\Water;
-use pocketmine\entity\Creature;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
+use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
 use pocketmine\Item\ItemIds;
@@ -329,11 +329,11 @@ abstract class WalkingMonster extends WalkingEntity implements Monster{
 	}
 
 	/**
-	 * @param Creature $creature
+	 * @param Living $creature
 	 * @param float    $distance
 	 * @return bool
 	 */
-	public function targetOption(Creature $creature, float $distance) : bool{
+	public function targetOption(Living $creature, float $distance) : bool{
 		$targetOption = false;
 
 		if($this->isFriendly()){
